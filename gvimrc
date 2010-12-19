@@ -154,8 +154,13 @@ endif
 """
 """ Set fonts
 """
-set guifont=consolas:h15
-set guifontwide=Yahei\ Consolas\ Hybrid:h15
+if has("mac")
+    set guifont=consolas:h18
+    set guifontwide=Yahei\ Consolas\ Hybrid:h18
+else
+    set guifont=consolas:h15
+    set guifontwide=Yahei\ Consolas\ Hybrid:h15
+endif
 
 " The following setting seems only works on mac and windows
 if has("win32") || has ("mac")
