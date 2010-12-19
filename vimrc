@@ -91,9 +91,7 @@ if has("autocmd")
   augroup END
 
 else
-
   set autoindent		" always set autoindenting on
-
 endif " has("autocmd")
 
 " Convenient command to see the difference between the current buffer and the
@@ -140,7 +138,12 @@ nmap <silent> <F6> :if &laststatus == 1<bar>
                      \set laststatus=1<bar>
                    \endif<CR>
 
+" Settings for taglist
 nmap tt :TlistToggle<CR>
+if has('mac')
+    " This version of ctags is installed from MacPort
+    let Tlist_Ctags_Cmd='/opt/local/bin/ctags' 
+endif
 
 "
 " Maximize the window when a file is opened in Windows Platform
