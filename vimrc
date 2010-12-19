@@ -140,6 +140,7 @@ nmap <silent> <F6> :if &laststatus == 1<bar>
 
 " Settings for taglist
 nmap tt :TlistToggle<CR>
+let Tlist_WinWidth=48
 if has('mac')
     " This version of ctags is installed from MacPort
     let Tlist_Ctags_Cmd='/opt/local/bin/ctags' 
