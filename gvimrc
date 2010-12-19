@@ -22,20 +22,16 @@ set vb t_vb=
 " allow backspacing over everything in insert mode
 set backspace=indent,eol,start
 
-if has("vms")
-  set nobackup		" do not keep a backup file, use versions instead
-else
-  set backup		" keep a backup file
-endif
+set nobackup		" do not keep a backup file, use versions instead
+set hidden          " Enable change buffer editing conviently.
 
 colorscheme desert
-set hidden          " Enable change buffer editing conviently.
 
 set history=100		" keep 100 lines of command line history
 set ruler			" show the cursor position all the time
 set showcmd			" display incomplete commands
 set incsearch		" do incremental searching
-set nu				" show line number
+"set nu				" show line number
 "set readonly		" set default to readonly
 set tabstop=4		" set tab width to 4
 set expandtab
@@ -123,10 +119,10 @@ if !has('gui_running')
   endif
 
   " Change encoding according to the current console code page
-  if &termencoding != '' && &termencoding != &encoding
-    let &encoding=&termencoding
-    let &fileencodings='ucs-bom,utf-8,' . &encoding
-  endif
+"  if &termencoding != '' && &termencoding != &encoding
+"    let &encoding=&termencoding
+"    let &fileencodings='ucs-bom,utf-8,' . &encoding
+"  endif
 endif
 
 " Display window width and height in GUI
@@ -155,12 +151,48 @@ if has("win32")
     au GUIENTER * simalt ~x
 endif
 
-"
-" Set fonts
-"
-set guifont=consolas:h18
-set guifontwide=Yahei\ Consolas\ Hybrid:h18
+"""
+""" Set fonts
+"""
+set guifont=consolas:h15
+set guifontwide=Yahei\ Consolas\ Hybrid:h15
 
-" For c++ code completion
+" The following setting seems only works on mac and windows
+if has("win32") || has ("mac")
+    set encoding=utf-8
+    set fileencodings=utf-8,chinese,latin-1
+    if has("win32")
+        set fileencoding=chinese
+    else
+        set fileencoding=utf-8
+    endif
+
+    language messages zh_CN.utf-8
+endif
+
+"""
+""" Some options from vim cast
+"""
+" Bind the Ctrl-D in insert mode to delete the backword character
+imap <C-F> <ESC>la
+imap <C-B> <ESC>i
+imap <C-D> <ESC>lxi
+
+" Source the vimrc file automatically after saving it
+if has("autocmd")
+  autocmd bufwritepost .vimrc source $MYVIMRC
+endif
+
+" Automatically open $MYVIMRC for editing
+let mapleader = ","
+nmap <leader>v :tabedit $MYVIMRC<CR>
+
+" Evaluate the script copied in the register ""
+nmap <leader>" :@"<CR>
+
+
+"""
+""" For c++ code completion
+"""
 set nocp
 filetype plugin on
