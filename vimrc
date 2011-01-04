@@ -186,6 +186,8 @@ endif
 imap <C-F> <ESC>la
 imap <C-B> <ESC>i
 imap <C-D> <ESC>lxi
+imap <C-A> <ESC><S-I>
+imap <C-E> <ESC><S-A>
 
 " Source the vimrc file automatically after saving it
 if has("autocmd")
