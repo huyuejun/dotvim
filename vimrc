@@ -199,6 +199,9 @@ nmap <leader>v :tabedit $MYVIMRC<CR>
 " Evaluate the script copied in the register ""
 nmap <leader>" :@"<CR>
 
+" Buffer operations
+nmap <F4> :bn<CR>
+nmap <F3> :bp<CR>
 
 """
 """ For c++ code completion
