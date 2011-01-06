@@ -38,7 +38,6 @@ set expandtab
 set shiftwidth=4
 set sw=4
 
-set statusline=%<%f\ %h%m%r%=%k[%{(&fenc==\"\")?&enc:&fenc}%{(&bomb?\",BOM\":\"\")}]\ %-14.(%l,%c%V%)\ %P
 
 " For Win32 GUI: remove 't' flag from 'guioptions': no tearoff menu entries
 " let &guioptions = substitute(&guioptions, "t", "", "g")
@@ -123,20 +122,24 @@ if !has('gui_running')
 "  endif
 endif
 
-" Display window width and height in GUI
-if has('gui_running') && has('statusline')
-  let &statusline=substitute(
-                 \&statusline, '%=', '%=%{winwidth(0)}x%{winheight(0)}  ', '')
-  set laststatus=2
-endif
+"set statusline=%<%f\ %h%m%r%=%k[%{(&fenc==\"\")?&enc:&fenc}%{(&bomb?\",BOM\":\"\")}]\ %-14.(%l,%c%V%)\ %P
+set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [ASCII=\%03.3b]\ [HEX=\%02.2B]\ [POS=%04l,%04v][%p%%]\ [LEN=%L]
+set laststatus=2 
+
+"" Display window width and height in GUI
+"if has('gui_running') && has('statusline')
+"  let &statusline=substitute(
+"                 \&statusline, '%=', '%=%{winwidth(0)}x%{winheight(0)}  ', '')
+"  set laststatus=2
+"endif
 
 " Key mapping to toggle the display of status line for the last window
-nmap <silent> <F6> :if &laststatus == 1<bar>
-                     \set laststatus=2<bar>
-                     \echo<bar>
-                   \else<bar>
-                     \set laststatus=1<bar>
-                   \endif<CR>
+"nmap <silent> <F6> :if &laststatus == 1<bar>
+"                     \set laststatus=2<bar>
+"                     \echo<bar>
+"                   \else<bar>
+"                     \set laststatus=1<bar>
+"                   \endif<CR>
 
 " Settings for taglist
 nmap tt :TlistToggle<CR>
