@@ -23,6 +23,11 @@ set vb t_vb=
 set backspace=indent,eol,start
 
 set nobackup		" do not keep a backup file, use versions instead
+
+" Store the swap file in ~/tmp
+set swapfile
+set dir=~/tmp
+
 set hidden          " Enable change buffer editing conviently.
 
 colorscheme desert
