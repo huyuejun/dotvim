@@ -1,0 +1,30 @@
+#!/bin/bash
+
+# build appd
+#make appd DEBUG=1
+
+echo "=========Begin copy binaries============="
+
+IP=10.64.78.227
+
+# First stop the iwssd on the remote server.
+#ssh -l root $IP "/usr/iwss/S99ISproxy stop"
+ssh -l root $IP "killall iwssd"
+
+# Copy NCIE libary, patterns and configuration files
+
+scp ~/Depots/Ent/IWSx/TMCore-Build/NCIE/linux/1001/lib/libtmncie.so root@$IP:/usr/iwss/lib
+scp ../misc/common/IWSSPINcieScan.dsc root@$IP:/var/iwss/
+scp ~/Depots/Ent/IWSx/TMCore-Build/NCIE/linux/1001/lib/skg10001.ptn root@$IP:/var/iwss/
+
+# Copy the appd and libbs.so to the test machine
+#scp ../../output/release/bin/appd root@$IP:/usr/iwss/
+#scp ../../output/release/bin/appd root@$IP:/usr/iwss/
+scp ../../output/debug/bin/iwss-process root@$IP:/usr/iwss/
+scp ../../output/debug/bin/lib/*.so root@$IP:/usr/iwss/lib/ 
+scp ../../output/debug/bin/plugin/*.so root@$IP:/usr/iwss/plugin/ 
+
+# Start the iwssd on the remote machine
+ssh -l root $IP "/usr/iwss/S99ISproxy start"
+
+echo "Done"

@@ -1,0 +1,12 @@
+#!/bin/bash
+
+IP=10.64.78.227
+XPATH=/home/gary/Depots/Ent/IWSx/Dev/IWSVA-5.5-SP1/IWSS/src
+cd ..
+rm -rf ncie.tar.gz
+tar czf ncie.tar.gz daemon pi_ncie
+
+cd build;
+ssh -l root $IP "rm -rf $XPATH/*"
+scp ../ncie.tar.gz root@$IP:$XPATh/
+ssh -l root $IP "tar xzf $XPATh/ncie.tar.gz -C $XPATH/"
