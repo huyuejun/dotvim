@@ -32,7 +32,12 @@ echo "create lookupfile tags..."
 
 echo -e "!_TAG_FILE_SORTED\t2\t/2=foldercase/" > "$lookup_name"
 #for file in $(cat "$flist_name"); do
-for file in $(find $path -name "*"); do
+for file in $(find $path -iname "*.[hc]" -o \
+                         -iname "*.cc" -o \
+                         -iname "*.cpp" -o \
+                         -iname "*.java" -o \
+                         -iname "*.cxx" -o \
+                         -iname "*.hpp"); do
     echo -ne "$(basename $file)\t$file\t1\n" >> "$tmpfile_name"
 done
 
