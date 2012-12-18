@@ -151,7 +151,11 @@ set laststatus=2
 
 " Settings for taglist
 nmap tt :TlistToggle<CR>
-let Tlist_WinWidth=48
+let Tlist_WinWidth=40
+let Tlist_Show_One_File=1         "Only show the tags for the current window
+"let Tlist_Exit_OnlyWindow=1       "Exit vim if taglist is the last window
+let Tlist_Use_Right_Window=1      "Show the taglist window on the right.
+
 if has('mac')
     " This version of ctags is installed from MacPort
     let Tlist_Ctags_Cmd='/opt/local/bin/ctags' 
@@ -170,8 +174,8 @@ endif
 """ Set fonts
 """
 if has("mac")
-    set guifont=consolas:h18
-    set guifontwide=Yahei\ Consolas\ Hybrid:h18
+    set guifont=consolas:h16
+    set guifontwide=Yahei\ Consolas\ Hybrid:h16
 else
     set guifont=consolas:h15
     set guifontwide=Yahei\ Consolas\ Hybrid:h15

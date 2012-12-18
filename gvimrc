@@ -23,6 +23,14 @@ set vb t_vb=
 set backspace=indent,eol,start
 
 set nobackup		" do not keep a backup file, use versions instead
+
+" Store the swap file in ~/tmp
+set swapfile
+set dir=~/tmp
+
+" Show line number
+set nu
+
 set hidden          " Enable change buffer editing conviently.
 
 colorscheme desert
@@ -38,7 +46,6 @@ set expandtab
 set shiftwidth=4
 set sw=4
 
-set statusline=%<%f\ %h%m%r%=%k[%{(&fenc==\"\")?&enc:&fenc}%{(&bomb?\",BOM\":\"\")}]\ %-14.(%l,%c%V%)\ %P
 
 " For Win32 GUI: remove 't' flag from 'guioptions': no tearoff menu entries
 " let &guioptions = substitute(&guioptions, "t", "", "g")
@@ -123,24 +130,32 @@ if !has('gui_running')
 "  endif
 endif
 
-" Display window width and height in GUI
-if has('gui_running') && has('statusline')
-  let &statusline=substitute(
-                 \&statusline, '%=', '%=%{winwidth(0)}x%{winheight(0)}  ', '')
-  set laststatus=2
-endif
+"set statusline=%<%f\ %h%m%r%=%k[%{(&fenc==\"\")?&enc:&fenc}%{(&bomb?\",BOM\":\"\")}]\ %-14.(%l,%c%V%)\ %P
+set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [ASCII=\%03.3b]\ [HEX=\%02.2B]\ [POS=%04l,%04v][%p%%]\ [LEN=%L]
+set laststatus=2 
+
+"" Display window width and height in GUI
+"if has('gui_running') && has('statusline')
+"  let &statusline=substitute(
+"                 \&statusline, '%=', '%=%{winwidth(0)}x%{winheight(0)}  ', '')
+"  set laststatus=2
+"endif
 
 " Key mapping to toggle the display of status line for the last window
-nmap <silent> <F6> :if &laststatus == 1<bar>
-                     \set laststatus=2<bar>
-                     \echo<bar>
-                   \else<bar>
-                     \set laststatus=1<bar>
-                   \endif<CR>
+"nmap <silent> <F6> :if &laststatus == 1<bar>
+"                     \set laststatus=2<bar>
+"                     \echo<bar>
+"                   \else<bar>
+"                     \set laststatus=1<bar>
+"                   \endif<CR>
 
 " Settings for taglist
 nmap tt :TlistToggle<CR>
-let Tlist_WinWidth=48
+let Tlist_WinWidth=40
+let Tlist_Show_One_File=1         "Only show the tags for the current window
+"let Tlist_Exit_OnlyWindow=1       "Exit vim if taglist is the last window
+let Tlist_Use_Right_Window=1      "Show the taglist window on the right.
+
 if has('mac')
     " This version of ctags is installed from MacPort
     let Tlist_Ctags_Cmd='/opt/local/bin/ctags' 
@@ -159,25 +174,28 @@ endif
 """ Set fonts
 """
 if has("mac")
-    set guifont=consolas:h18
-    set guifontwide=Yahei\ Consolas\ Hybrid:h18
+    set guifont=consolas:h16
+    set guifontwide=Yahei\ Consolas\ Hybrid:h16
 else
     set guifont=consolas:h15
     set guifontwide=Yahei\ Consolas\ Hybrid:h15
 endif
 
 " The following setting seems only works on mac and windows
-if has("win32") || has ("mac")
-    set encoding=utf-8
-    set fileencodings=utf-8,chinese,latin-1
-    if has("win32")
-        set fileencoding=chinese
-    else
-        set fileencoding=utf-8
-    endif
+"if has("win32") || has ("mac")
+"    set encoding=utf-8
+"    set fileencodings=utf-8,chinese,latin-1
+"    if has("win32")
+"        set fileencoding=chinese
+"    else
+"        set fileencoding=utf-8
+"    endif
 
-    language messages zh_CN.utf-8
-endif
+"    language messages zh_CN.utf-8
+"endif
+set encoding=gbk
+set fileencoding=gbk
+set fileencodings=gbk,gb2312,utf-8
 
 """
 """ Some options from vim cast
@@ -186,6 +204,8 @@ endif
 imap <C-F> <ESC>la
 imap <C-B> <ESC>i
 imap <C-D> <ESC>lxi
+imap <C-A> <ESC><S-I>
+imap <C-E> <ESC><S-A>
 
 " Source the vimrc file automatically after saving it
 if has("autocmd")
@@ -199,9 +219,52 @@ nmap <leader>v :tabedit $MYVIMRC<CR>
 " Evaluate the script copied in the register ""
 nmap <leader>" :@"<CR>
 
+" Buffer operations
+nmap <F4> :bn<CR>
+nmap <F3> :bp<CR>
 
 """
 """ For c++ code completion
 """
 set nocp
 filetype plugin on
+
+"""
+""" Settings for the lookupfile
+"""
+let g:LookupFile_MinPatLength = 2               "最少输入2个字符才开始查找
+let g:LookupFile_PreserveLastPattern = 0        "不保存上次查找的字符串
+let g:LookupFile_PreservePatternHistory = 1     "保存查找历史
+let g:LookupFile_AlwaysAcceptFirst = 1          "回车打开第一个匹配项目
+let g:LookupFile_AllowNewFiles = 0              "不允许创建不存在的文件
+if filereadable("./filenametags")                "设置tag文件的名字
+let g:LookupFile_TagExpr = '"./filenametags"'
+endif
+"映射LookupFile为,lk
+nmap <silent> <leader>lk :LUTags<cr>
+"映射LUBufs为,ll
+nmap <silent> <leader>ll :LUBufs<cr>
+"映射LUWalk为,lw
+nmap <silent> <leader>lw :LUWalk<cr>
+
+" lookup file with ignore case
+function! LookupFile_IgnoreCaseFunc(pattern)    
+    let _tags = &tags    
+    try        
+        let &tags = eval(g:LookupFile_TagExpr)        
+        let newpattern = '\c' . a:pattern        
+        let tags = taglist(newpattern)    
+    catch        
+        echohl ErrorMsg | echo "Exception: " . v:exception | echohl NONE        
+        return ""    
+    finally        
+        let &tags = _tags    
+    endtry
+
+    " Show the matches for what is typed so far.
+    let files = map(tags, 'v:val["filename"]')
+    return files
+endfunction
+
+let g:LookupFile_LookupFunc = 'LookupFile_IgnoreCaseFunc'
+
