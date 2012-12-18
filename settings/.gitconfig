@@ -1,0 +1,5 @@
+[user]
+	name = huyuejun
+	email = parallel.hu@gmail.com
+[remote "origin"]
+    url = ssh://git@github.com/huyuejun/dotvim.git
