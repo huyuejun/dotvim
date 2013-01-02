@@ -1,0 +1,3 @@
+1. Compile the help doc
+    $ vim -c "helptags ~/.vim/doc" -c "q"
+

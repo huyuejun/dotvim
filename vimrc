@@ -33,6 +33,8 @@ set nu
 
 set hidden          " Enable change buffer editing conviently.
 
+" Disable macvim schema
+let macvim_skip_colorscheme=1
 colorscheme desert
 
 set history=100		" keep 100 lines of command line history
@@ -134,32 +136,32 @@ endif
 set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [ASCII=\%03.3b]\ [HEX=\%02.2B]\ [POS=%04l,%04v][%p%%]\ [LEN=%L]
 set laststatus=2 
 
-"" Display window width and height in GUI
-"if has('gui_running') && has('statusline')
-"  let &statusline=substitute(
-"                 \&statusline, '%=', '%=%{winwidth(0)}x%{winheight(0)}  ', '')
-"  set laststatus=2
-"endif
-
-" Key mapping to toggle the display of status line for the last window
-"nmap <silent> <F6> :if &laststatus == 1<bar>
-"                     \set laststatus=2<bar>
-"                     \echo<bar>
-"                   \else<bar>
-"                     \set laststatus=1<bar>
-"                   \endif<CR>
-
-" Settings for taglist
-nmap tt :TlistToggle<CR>
-let Tlist_WinWidth=40
-let Tlist_Show_One_File=1         "Only show the tags for the current window
-"let Tlist_Exit_OnlyWindow=1       "Exit vim if taglist is the last window
-let Tlist_Use_Right_Window=1      "Show the taglist window on the right.
-
+"""
+""" Settings for taglist
+"""
 if has('mac')
     " This version of ctags is installed from MacPort
     let Tlist_Ctags_Cmd='/opt/local/bin/ctags' 
 endif
+
+let Tlist_Show_One_File=1         "Only show the tags for the current window
+let Tlist_Exit_OnlyWindow=1       "Exit vim if taglist is the last window
+let Tlist_Use_Right_Window=1      "Show the taglist window on the right.
+let Tlist_Show_Menu=1             "Show taglist menu
+"let Tlist_Auto_Open=1
+
+nmap tt :TlistToggle<CR>
+
+"""
+""" Setting for win manager
+"""
+let g:winManagerWindowLayout = "TagList|FileExplorer,BufExplorer"
+let g:winManagerWidth = 42
+nmap <silent> <F8> :WMToggle<cr>
+map <c-w><c-f> :FirstExplorerWindow<cr>
+map <c-w><c-b> :BottomExplorerWindow<cr>
+map <c-w><c-t> :WMToggle<cr> 
+
 
 "
 " Maximize the window when a file is opened in Windows Platform
@@ -220,8 +222,11 @@ nmap <leader>v :tabedit $MYVIMRC<CR>
 nmap <leader>" :@"<CR>
 
 " Buffer operations
-nmap <F4> :bn<CR>
+"nmap <F4> :bn<CR>
 nmap <F3> :bp<CR>
+
+"Enter buffer explorer
+nmap <silent> <F4> :BufExplorer<CR>
 
 """
 """ For c++ code completion
