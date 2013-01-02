@@ -144,6 +144,7 @@ if has('mac')
     let Tlist_Ctags_Cmd='/opt/local/bin/ctags' 
 endif
 
+let Tlist_WinWidth=42             
 let Tlist_Show_One_File=1         "Only show the tags for the current window
 let Tlist_Exit_OnlyWindow=1       "Exit vim if taglist is the last window
 let Tlist_Use_Right_Window=1      "Show the taglist window on the right.
