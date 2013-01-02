@@ -67,69 +67,69 @@ inoremap <C-U> <C-G>u<C-U>
 " Switch syntax highlighting on, when the terminal has colors
 " Also switch on highlighting the last used search pattern.
 if &t_Co > 2 || has("gui_running")
-  syntax on
-  set hlsearch
+    syntax on
+    set hlsearch
 endif
 
 " Only do this part when compiled with support for autocommands.
 if has("autocmd")
 
-  " Enable file type detection.
-  " Use the default filetype settings, so that mail gets 'tw' set to 72,
-  " 'cindent' is on in C files, etc.
-  " Also load indent files, to automatically do language-dependent indenting.
-  filetype plugin indent on
+    " Enable file type detection.
+    " Use the default filetype settings, so that mail gets 'tw' set to 72,
+    " 'cindent' is on in C files, etc.
+    " Also load indent files, to automatically do language-dependent indenting.
+    filetype plugin indent on
 
-  " Put these in an autocmd group, so that we can delete them easily.
-  augroup vimrcEx
-  au!
+    " Put these in an autocmd group, so that we can delete them easily.
+    augroup vimrcEx
+        au!
 
-  " For all text files set 'textwidth' to 78 characters.
-  autocmd FileType text setlocal textwidth=78
+        " For all text files set 'textwidth' to 78 characters.
+        autocmd FileType text setlocal textwidth=78
 
-  " When editing a file, always jump to the last known cursor position.
-  " Don't do it when the position is invalid or when inside an event handler
-  " (happens when dropping a file on gvim).
-  " Also don't do it when the mark is in the first line, that is the default
-  " position when opening a file.
-  autocmd BufReadPost *
-    \ if line("'\"") > 1 && line("'\"") <= line("$") |
-    \   exe "normal! g`\"" |
-    \ endif
+        " When editing a file, always jump to the last known cursor position.
+        " Don't do it when the position is invalid or when inside an event handler
+        " (happens when dropping a file on gvim).
+        " Also don't do it when the mark is in the first line, that is the default
+        " position when opening a file.
+        autocmd BufReadPost *
+                    \ if line("'\"") > 1 && line("'\"") <= line("$") |
+                    \   exe "normal! g`\"" |
+                    \ endif
 
-  augroup END
+    augroup END
 
 else
-  set autoindent		" always set autoindenting on
+    set autoindent		" always set autoindenting on
 endif " has("autocmd")
 
 " Convenient command to see the difference between the current buffer and the
 " file it was loaded from, thus the changes you made.
 " Only define it when not defined already.
 if !exists(":DiffOrig")
-  command DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis
-		  \ | wincmd p | diffthis
+    command DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis
+                \ | wincmd p | diffthis
 endif
 
 " Non-GUI setting
 if !has('gui_running')
-  " Do not increase the windows width in taglist
-  let Tlist_Inc_Winwidth=0
+    " Do not increase the windows width in taglist
+    let Tlist_Inc_Winwidth=0
 
-  " Set text-mode menu
-  if has('wildmenu')
-    set wildmenu
-    set cpoptions-=<
-    set wildcharm=<C-Z>
-    nmap <F10>      :emenu <C-Z>
-    imap <F10> <C-O>:emenu <C-Z>
-  endif
+    " Set text-mode menu
+    if has('wildmenu')
+        set wildmenu
+        set cpoptions-=<
+        set wildcharm=<C-Z>
+        nmap <F10>      :emenu <C-Z>
+        imap <F10> <C-O>:emenu <C-Z>
+    endif
 
-  " Change encoding according to the current console code page
-"  if &termencoding != '' && &termencoding != &encoding
-"    let &encoding=&termencoding
-"    let &fileencodings='ucs-bom,utf-8,' . &encoding
-"  endif
+    " Change encoding according to the current console code page
+    "  if &termencoding != '' && &termencoding != &encoding
+    "    let &encoding=&termencoding
+    "    let &fileencodings='ucs-bom,utf-8,' . &encoding
+    "  endif
 endif
 
 "set statusline=%<%f\ %h%m%r%=%k[%{(&fenc==\"\")?&enc:&fenc}%{(&bomb?\",BOM\":\"\")}]\ %-14.(%l,%c%V%)\ %P
@@ -156,7 +156,7 @@ nmap tt :TlistToggle<CR>
 """
 """ Setting for win manager
 """
-let g:winManagerWindowLayout = "TagList|FileExplorer,BufExplorer"
+let g:winManagerWindowLayout = "TagList|,BufExplorer"
 let g:winManagerWidth = 42
 nmap <silent> <F8> :WMToggle<cr>
 map <c-w><c-f> :FirstExplorerWindow<cr>
@@ -212,7 +212,7 @@ imap <C-E> <ESC><S-A>
 
 " Source the vimrc file automatically after saving it
 if has("autocmd")
-  autocmd bufwritepost .vimrc source $MYVIMRC
+    autocmd bufwritepost .vimrc source $MYVIMRC
 endif
 
 " Automatically open $MYVIMRC for editing
@@ -244,7 +244,7 @@ let g:LookupFile_PreservePatternHistory = 1     "保存查找历史
 let g:LookupFile_AlwaysAcceptFirst = 1          "回车打开第一个匹配项目
 let g:LookupFile_AllowNewFiles = 0              "不允许创建不存在的文件
 if filereadable("./filenametags")                "设置tag文件的名字
-let g:LookupFile_TagExpr = '"./filenametags"'
+    let g:LookupFile_TagExpr = '"./filenametags"'
 endif
 "映射LookupFile为,lk
 nmap <silent> <leader>lk :LUTags<cr>
@@ -273,4 +273,34 @@ function! LookupFile_IgnoreCaseFunc(pattern)
 endfunction
 
 let g:LookupFile_LookupFunc = 'LookupFile_IgnoreCaseFunc'
+
+"
+" Tab switch
+"
+" Meta(Command on Mac)+1-0 jumps to tab 1-10, Shift+Meta+1-0 jumps to tab 11-20:
+" It works very good!
+"
+if has('mac')
+    let s:windowmapnr = 0
+    let s:wins='1234567890!@#$%^&*()'
+    while (s:windowmapnr < strlen(s:wins))
+        exe 'noremap <silent> <D-' . s:wins[s:windowmapnr] . '> ' . (s:windowmapnr + 1) . 'gt'
+        exe 'inoremap <silent> <D-' . s:wins[s:windowmapnr] . '> <C-O>' . (s:windowmapnr + 1) . 'gt'
+        exe 'cnoremap <silent> <D-' . s:wins[s:windowmapnr] . '> <C-C>' . (s:windowmapnr + 1) . 'gt'
+        exe 'vnoremap <silent> <D-' . s:wins[s:windowmapnr] . '> <C-C>' . (s:windowmapnr + 1) . 'gt'
+        let s:windowmapnr += 1
+    endwhile
+    unlet s:windowmapnr s:wins
+else
+    let s:windowmapnr = 0
+    let s:wins='1234567890!@#$%^&*()'
+    while (s:windowmapnr < strlen(s:wins))
+        exe 'noremap <silent> <M-' . s:wins[s:windowmapnr] . '> ' . (s:windowmapnr + 1) . 'gt'
+        exe 'inoremap <silent> <M-' . s:wins[s:windowmapnr] . '> <C-O>' . (s:windowmapnr + 1) . 'gt'
+        exe 'cnoremap <silent> <M-' . s:wins[s:windowmapnr] . '> <C-C>' . (s:windowmapnr + 1) . 'gt'
+        exe 'vnoremap <silent> <M-' . s:wins[s:windowmapnr] . '> <C-C>' . (s:windowmapnr + 1) . 'gt'
+        let s:windowmapnr += 1
+    endwhile
+    unlet s:windowmapnr s:wins
+endif
 
