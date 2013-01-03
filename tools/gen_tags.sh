@@ -14,7 +14,7 @@ lookup_name=filenametags
 ctags_name=ctags
 cscope_name=cscope.out
 
-tmpfile_name=$(mktemp -q)
+tmpfile_name=temp_filenames_for_tag
 
 #1.create list for lookupfile
 #The list also will be used for scope and ctags
@@ -53,7 +53,7 @@ cscope -bq -i "$flist_name"
 #3.for ctags
 echo "create ctags tags..."
 
-ctags -L "$flist_name"
+ctags --c++-kinds=+p --fields=+iaS --extra=+q -L "$flist_name"
 
 
 rm -f "$tmpfile_name"
