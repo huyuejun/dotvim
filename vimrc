@@ -8,6 +8,7 @@
 """
 """ Some default options
 """
+let mapleader = ","
 
 " Use Vim settings, rather then Vi settings (much better!).
 " This must tbe the first, because it changes other options as a side effect.
@@ -136,6 +137,17 @@ endif
 set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [ASCII=\%03.3b]\ [HEX=\%02.2B]\ [POS=%04l,%04v][%p%%]\ [LEN=%L]
 set laststatus=2 
 
+
+"""
+""" Ctag & cscope
+"""
+" Run this command to regenerate the tags
+"map <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>  
+
+" Redirect the cscope search result to the quickfix window
+"set cscopequickfix=s-,c-,d-,i-,t-,e-
+
+
 """
 """ Settings for taglist
 """
@@ -156,13 +168,22 @@ nmap tt :TlistToggle<CR>
 """
 """ Setting for win manager
 """
-let g:winManagerWindowLayout = "TagList|,BufExplorer"
-let g:winManagerWidth = 42
-nmap <silent> <F8> :WMToggle<cr>
-map <c-w><c-f> :FirstExplorerWindow<cr>
-map <c-w><c-b> :BottomExplorerWindow<cr>
-map <c-w><c-t> :WMToggle<cr> 
+"Setting for NERT tree
+"let g:NERDTree_title="[NERD Tree]"
+"function! NERDTree_Start()
+"    exec 'NERDTree'
+"endfunction
 
+"function! NERDTree_IsValid()
+"    return 1
+"endfunction
+
+"let g:winManagerWindowLayout = "TagList|NERDTree,BufExplorer"
+"let g:winManagerWidth = 42
+"nmap <silent> <F8> :WMToggle<cr>
+"nmap vm :WMToggle<cr>
+"map <c-w><c-f> :FirstExplorerWindow<cr>
+"map <c-w><c-b> :BottomExplorerWindow<cr>
 
 "
 " Maximize the window when a file is opened in Windows Platform
@@ -216,7 +237,6 @@ if has("autocmd")
 endif
 
 " Automatically open $MYVIMRC for editing
-let mapleader = ","
 nmap <leader>v :tabedit $MYVIMRC<CR>
 
 " Evaluate the script copied in the register ""
@@ -278,7 +298,7 @@ let g:LookupFile_LookupFunc = 'LookupFile_IgnoreCaseFunc'
 " Tab switch
 "
 " Meta(Command on Mac)+1-0 jumps to tab 1-10, Shift+Meta+1-0 jumps to tab 11-20:
-" It works very good!
+" It works very good, and I really love it.
 "
 if has('mac')
     let s:windowmapnr = 0
